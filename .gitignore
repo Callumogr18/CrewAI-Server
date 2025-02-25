@@ -5,8 +5,13 @@ build/
 dist/
 wheels/
 *.egg-info
+.python-version
+
+# Pycharm idea
+.idea/
 
 # Virtual environments
+.venv/
 .crewVenv/
 
 # Azure config file
