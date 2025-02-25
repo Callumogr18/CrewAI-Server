@@ -5,6 +5,7 @@ description = "A CrewAI server which can be used to send prompts from various di
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "crewai-tools>=0.36.0",
     "crewai>=0.102.0",
     "flask>=3.1.0",
 ]
