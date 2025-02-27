@@ -11,11 +11,7 @@ wheels/
 .idea/
 
 # Virtual environments
-.venv/
-.crewVenv/
+.new_venv/
 
 # Azure config file
 .env
-
-# uv file containing dependencies
-uv.lock
