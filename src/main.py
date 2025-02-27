@@ -1,25 +1,22 @@
-import sys
-from src.crew import run_crew
+import os
+import openai
 
+from dotenv import load_dotenv
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python run_crew.py <topic>")
-        print("Example: python run_crew.py 'Quantum Computing'")
-        sys.exit(1)
+load_dotenv()
 
-    topic = sys.argv[1]
-    print(f"Running CrewAI workflow for topic: {topic}")
+client = openai.AzureOpenAI(
+    azure_endpoint=os.getenv("AZURE_API_ENDPOINT"),
+    api_key=os.getenv("AZURE_OPENAI_KEY"),
+    api_version=os.getenv("AZURE_API_VERSION")
+)
 
-    try:
-        result = run_crew(topic)
-        print("\n== FINAL RESULT ==")
-        print(result)
-        print("\nCheck report.md for the complete report.")
-    except Exception as e:
-        print(f"Error running CrewAI workflow: {e}")
-        sys.exit(1)
+model = os.getenv("CHAT_COMPLETION_NAME")
 
+prompt = str(input("Prompt: "))
 
-if __name__ == "__main__":
-    main()
+response = client.chat.completions.create(
+    model=model,
+    messages=[{"role": "system", "content": "You are a helpful assistant."},
+              {"role": "user", "content": prompt}]
+)
