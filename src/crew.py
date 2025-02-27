@@ -1,43 +1,15 @@
-from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
+import os
+import openai
 
-@CrewBase
-class LatestAiDevelopmentCrew():
-  """LatestAiDevelopment crew"""
+from dotenv import load_dotenv
 
-  @agent
-  def researcher(self) -> Agent:
-    return Agent(
-      config=self.agents_config['researcher'],
-      verbose=True
-    )
+load_dotenv()
 
-  @agent
-  def reporting_analyst(self) -> Agent:
-    return Agent(
-      config=self.agents_config['reporting_analyst'],
-      verbose=True
-    )
+client = openai.AzureOpenAI(
+    azure_endpoint=os.getenv("AZURE_API_ENDPOINT"),
+    api_key=os.getenv("AZURE_OPENAI_KEY"),
+    api_version=os.getenv("AZURE_API_VERSION")
+)
 
-  @task
-  def research_task(self) -> Task:
-    return Task(
-      config=self.tasks_config['research_task'],
-    )
+model = os.getenv("CHAT_COMPLETION_NAME")
 
-  @task
-  def reporting_task(self) -> Task:
-    return Task(
-      config=self.tasks_config['reporting_task'],
-      output_file='output/report.md' # This is the file that will be contain the final report.
-    )
-
-  @crew
-  def crew(self) -> Crew:
-    """Creates the LatestAiDevelopment crew"""
-    return Crew(
-      agents=self.agents, # Automatically created by the @agent decorator
-      tasks=self.tasks, # Automatically created by the @task decorator
-      process=Process.sequential,
-      verbose=True,
-    )
